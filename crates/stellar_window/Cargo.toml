@@ -1,0 +1,12 @@
+[package]
+name = "stellar_window"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fent_ecs = { workspace = true }
+fent_derive = { workspace = true }
+
+stellar_app = { path = "../stellar_app" }
+
+winit = "0.31.0-beta.3"

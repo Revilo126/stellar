@@ -1,0 +1,14 @@
+# .gitignore for Stellar
+
+# Folders
+
+/crates/*/target
+/target/
+
+# Files 
+.*
+*.lock
+
+# Allow these dotfiles
+!/.gitignore
+!/.github/

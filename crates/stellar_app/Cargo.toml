@@ -1,0 +1,8 @@
+[package]
+name = "stellar_app"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fent_ecs = { workspace = true }
+fent_derive = { workspace = true }

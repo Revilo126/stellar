@@ -1,0 +1,11 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.dependencies]
+fent_ecs = { path = "../fent_ecs" }
+fent_derive = { path = "../fent_ecs/fent_derive" }
+
+glam = "0.34.0"
+
+log = "0.4.34"
