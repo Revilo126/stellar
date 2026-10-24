@@ -3,8 +3,10 @@
 //!
 
 pub mod app;
+pub mod base;
 pub mod lifecycle;
 pub mod plugins;
+pub mod schedule;
 
 #[cfg(test)]
 mod test {

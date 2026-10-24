@@ -1,16 +1,16 @@
 //! Contains the base [`App`] structure.
-
-use fent_ecs::{schedule::Schedule, system::IntoSystem, world::World};
+use fent_ecs::{system::IntoSystem, world::World};
 
 use crate::{
-    lifecycle::{AppState, ScheduleId, ScheduleLabel, schedule_id},
+    base::{AppState, Exit},
+    lifecycle::{ScheduleId, ScheduleLabel, schedule_id},
     plugins::Plugin,
+    schedule::Schedules,
 };
 
 pub struct App {
     pub(crate) world: World,
-    pub(crate) schedules: Vec<Option<ScheduleEntry>>,
-    pub(crate) schedule_order: Vec<ScheduleId>,
+    pub(crate) schedules: Schedules,
 }
 
 impl Default for App {
@@ -21,43 +21,14 @@ impl Default for App {
 
         Self {
             world,
-            schedules: Vec::default(),
-            schedule_order: Vec::default(),
+            schedules: Schedules::default(),
         }
     }
 }
 
 impl App {
-    pub(crate) fn add_schedule<L: ScheduleLabel>(&mut self) -> ScheduleId {
-        let id = schedule_id::<L>();
-
-        if self.schedules.len() <= id {
-            self.schedules.resize_with(id + 1, || None);
-        }
-
-        if self.schedules[id].is_none() {
-            self.schedules[id] = Some(ScheduleEntry {
-                priority: L::priority(),
-                schedule: Schedule::default(),
-                condition: None,
-            });
-
-            self.order_schedules();
-        }
-
-        id
-    }
-
-    fn order_schedules(&mut self) {
-        self.schedule_order = self
-            .schedules
-            .iter()
-            .enumerate()
-            .filter_map(|(id, entry)| entry.as_ref().map(|_| id))
-            .collect();
-
-        self.schedule_order
-            .sort_by_key(|&id| std::cmp::Reverse(self.schedules[id].as_ref().unwrap().priority));
+    pub fn add_schedule<L: ScheduleLabel>(&mut self) -> ScheduleId {
+        self.schedules.add_schedule::<L>()
     }
 
     pub fn set_schedule_condition<L, F>(&mut self, condition: F) -> &mut Self
@@ -65,9 +36,7 @@ impl App {
         L: ScheduleLabel,
         F: Fn(&World) -> bool + 'static,
     {
-        let id = self.add_schedule::<L>();
-
-        self.schedules[id].as_mut().unwrap().condition = Some(Box::new(condition));
+        self.schedules.set_schedule_condition::<L, F>(condition);
 
         self
     }
@@ -77,13 +46,7 @@ impl App {
         L: ScheduleLabel,
         S: IntoSystem<M>,
     {
-        let id = self.add_schedule::<L>();
-
-        self.schedules[id]
-            .as_mut()
-            .unwrap()
-            .schedule
-            .insert_system(sys);
+        self.schedules.add_system(_label, sys);
 
         self
     }
@@ -93,43 +56,22 @@ impl App {
         self
     }
 
-    pub(crate) fn run_schedule(&mut self, id: ScheduleId) {
-        let should_run = {
-            let Some(Some(entry)) = self.schedules.get(id) else {
-                return;
-            };
-
-            match &entry.condition {
-                Some(condition) => condition(&self.world),
-                None => true,
-            }
-        };
-
-        if !should_run {
-            return;
-        }
-
-        if let Some(Some(entry)) = self.schedules.get_mut(id) {
-            entry.schedule.run(&mut self.world);
-        }
-    }
-
-    pub(crate) fn init_schedule(&mut self, id: ScheduleId) {
-        if let Some(Some(entry)) = self.schedules.get_mut(id) {
-            entry.schedule.initialize(&mut self.world).unwrap();
-        }
-    }
-
     pub fn run(&mut self) {
-        let order = self.schedule_order.clone();
+        let order = self.schedules.schedule_order.clone();
 
         for &id in &order {
-            self.init_schedule(id);
+            self.schedules.init_schedule(id, &mut self.world);
         }
+
+        let exit = schedule_id::<Exit>();
 
         'runner: loop {
             for &id in &order {
-                self.run_schedule(id);
+                if id == exit {
+                    continue;
+                }
+
+                self.schedules.run_schedule(id, &mut self.world);
             }
 
             if self
@@ -138,16 +80,10 @@ impl App {
                 .unwrap()
                 .is_requested()
             {
+                self.schedules.run_schedule(exit, &mut self.world);
+
                 break 'runner;
             }
         }
     }
-}
-
-#[allow(clippy::type_complexity)]
-pub(crate) struct ScheduleEntry {
-    priority: isize,
-    schedule: Schedule,
-    // How the fuck is this considered complex?
-    condition: Option<Box<dyn Fn(&World) -> bool>>,
 }

@@ -11,8 +11,6 @@ use std::{
     },
 };
 
-use fent_derive::Resource;
-
 pub trait ScheduleLabel: 'static + Send + Sync {
     fn name() -> &'static str {
         type_name::<Self>()
@@ -43,20 +41,4 @@ pub fn schedule_id<L: 'static>() -> ScheduleId {
     ids.insert(type_id, id);
 
     id
-}
-
-/// Allows [`fent_ecs::system::System`]'s to close/exit a running [`crate::app::App`].
-#[derive(Default, Resource)]
-pub struct AppState {
-    requested: bool,
-}
-
-impl AppState {
-    pub fn request(&mut self) {
-        self.requested = true;
-    }
-
-    pub fn is_requested(&self) -> bool {
-        self.requested
-    }
 }
