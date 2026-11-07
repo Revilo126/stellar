@@ -4,9 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-fent_ecs = { workspace = true }
-fent_derive = { workspace = true }
+fent_ecs.workspace = true
+fent_derive.workspace = true
+
+log.workspace = true
 
 stellar_app = { path = "../stellar_app" }
+stellar_input = { path = "../stellar_input" }
 
-sdl3 = "0.20.0"
+sdl3 = "0.22.0"

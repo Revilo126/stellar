@@ -1,9 +1,9 @@
 //! Contains the base [`App`] structure.
-use fent_ecs::{system::IntoSystem, world::World};
+use fent_ecs::{component::resource::Resource, system::IntoSystem, world::World};
 
 use crate::{
     base::{AppState, Exit},
-    lifecycle::{ScheduleId, ScheduleLabel, schedule_id},
+    lifecycle::{ScheduleLabel, schedule_id},
     plugins::Plugin,
     schedule::Schedules,
 };
@@ -27,8 +27,16 @@ impl Default for App {
 }
 
 impl App {
-    pub fn add_schedule<L: ScheduleLabel>(&mut self) -> ScheduleId {
-        self.schedules.add_schedule::<L>()
+    pub fn insert_resource<R: Resource>(&mut self, resource: R) -> &mut Self {
+        self.world.insert_resource(resource);
+
+        self
+    }
+
+    pub fn add_schedule<L: ScheduleLabel>(&mut self) -> &mut Self {
+        self.schedules.add_schedule::<L>();
+
+        self
     }
 
     pub fn set_schedule_condition<L, F>(&mut self, condition: F) -> &mut Self

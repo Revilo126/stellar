@@ -1,0 +1,14 @@
+[package]
+name = "stellar"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fent_ecs.workspace = true
+fent_derive.workspace = true
+
+stellar_app = { path = "../stellar_app", version = "0.1.0" }
+stellar_derive = { path = "../stellar_derive", version = "0.1.0" }
+stellar_input = { path = "../stellar_input", version = "0.1.0" }
+stellar_math = { path = "../stellar_math", version = "0.1.0" }
+stellar_window = { path = "../stellar_window", version = "0.1.0" }

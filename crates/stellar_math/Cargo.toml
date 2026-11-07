@@ -1,0 +1,10 @@
+[package]
+name = "stellar_math"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fent_ecs.workspace = true
+fent_derive.workspace = true
+
+glam = "0.34.1"

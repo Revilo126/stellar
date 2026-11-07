@@ -1,6 +1,5 @@
 //! 'stellar_app' is the Stellar crate in which all aspects relating to the App object are located,
 //! This includes lifecycle hooks and the running of said applications.
-//!
 
 pub mod app;
 pub mod base;
