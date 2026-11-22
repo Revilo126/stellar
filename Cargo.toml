@@ -3,8 +3,8 @@ resolver = "3"
 members = ["crates/*"]
 
 [workspace.dependencies]
-fent_ecs = { path = "../fent_ecs" }
-fent_derive = { path = "../fent_ecs/fent_derive" }
+fent_ecs = "0.1.4"
+fent_derive = "0.1.3"
 
 glam = "0.34.0"
 

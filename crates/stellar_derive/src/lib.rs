@@ -27,7 +27,7 @@ pub fn derive_schedule_label(input: TokenStream) -> TokenStream {
     }
 
     let expanded = quote! {
-        impl ScheduleLabel for #name {
+        impl stellar_app::lifecycle::ScheduleLabel for #name {
             fn priority() -> isize {
                 #priority
             }

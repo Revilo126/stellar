@@ -70,7 +70,7 @@ impl Schedules {
             .as_mut()
             .unwrap()
             .schedule
-            .insert_system(sys);
+            .add_system(sys);
     }
 
     pub(crate) fn run_schedule(&mut self, id: ScheduleId, world: &mut World) {

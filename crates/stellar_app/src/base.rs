@@ -75,10 +75,10 @@ fn startup_add_data(mut cmd: Commands) {
 
 // Base plugin
 
-/// Adds all the base functionality of a Stellar app.
-pub struct BasePlugins;
+/// Adds all the base functionality of a Stellar [`App`].
+pub struct BasePlugin;
 
-impl Plugin for BasePlugins {
+impl Plugin for BasePlugin {
     fn build(&self, app: &mut App) {
         app.add_schedule::<First>();
         app.add_schedule::<Update>();

@@ -5,10 +5,18 @@ edition = "2024"
 
 [dependencies]
 fent_ecs.workspace = true
-fent_derive.workspace = true
+
+log.workspace = true
 
 stellar_app = { path = "../stellar_app", version = "0.1.0" }
 stellar_derive = { path = "../stellar_derive", version = "0.1.0" }
 stellar_input = { path = "../stellar_input", version = "0.1.0" }
+stellar_log = { path = "../stellar_log", version = "0.1.0" }
 stellar_math = { path = "../stellar_math", version = "0.1.0" }
+stellar_renderer = { path = "../stellar_renderer", version = "0.1.0" }
 stellar_window = { path = "../stellar_window", version = "0.1.0" }
+
+[dev-dependencies]
+
+vulkano = "0.35.2"
+vulkano-shaders = "0.35.0"

@@ -1,6 +1,7 @@
 use fent_derive::Component;
 use glam::{Quat, Vec3};
 
+#[allow(dead_code)]
 #[derive(Component)]
 pub struct Transform {
     pub translation: Vec3,
@@ -9,6 +10,7 @@ pub struct Transform {
 }
 
 impl Transform {
+    #[allow(dead_code)]
     pub const IDENTITY: Self = Transform {
         translation: Vec3::ZERO,
         rotation: Quat::IDENTITY,

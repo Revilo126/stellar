@@ -1,0 +1,21 @@
+[package]
+name = "stellar_renderer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fent_ecs.workspace = true
+
+log.workspace = true
+
+glam.workspace = true
+
+stellar_app = { path = "../stellar_app" }
+stellar_derive = { path = "../stellar_derive" }
+stellar_window = { path = "../stellar_window" }
+
+vulkano = "0.35.2"
+
+ash = "0.38.0"
+
+glfw = { version = "0.63.0", features = ["vulkan"] }

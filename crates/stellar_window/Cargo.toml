@@ -12,4 +12,4 @@ log.workspace = true
 stellar_app = { path = "../stellar_app" }
 stellar_input = { path = "../stellar_input" }
 
-sdl3 = "0.22.0"
+glfw = { version = "0.63.0", features = ["vulkan"] }

@@ -5,4 +5,3 @@ edition = "2024"
 
 [dependencies]
 fent_ecs.workspace = true
-fent_derive.workspace = true
